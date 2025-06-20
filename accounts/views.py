@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import UserRegistrationForm, ApprovalForm
 from .models import UserProfile
 from .tasks import send_registration_notification, send_approval_status_email
+from .models import EmailLog
 
 
 def register(request):
@@ -40,3 +41,12 @@ def approve_user(request, user_id):
     else:
         form = ApprovalForm()
     return render(request, 'approval_form.html', {'form': form, 'user': user})
+
+
+@login_required
+def email_log_view(request):
+    if not request.user.profile.role == 'management':
+        messages.error(request, 'You do not have permission to view this page.')
+        return redirect('home')
+    logs = EmailLog.objects.all().order_by('-created_at')
+    return render(request, 'email_log.html', {'logs': logs})

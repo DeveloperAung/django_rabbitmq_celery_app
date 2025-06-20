@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Email Logs{% endblock %}
+{% block content %}
+    <h1>Email Logs</h1>
+    <table border="1">
+        <tr>
+            <th>Recipient</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Sent At</th>
+            <th>Created At</th>
+        </tr>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.recipient.username }}</td>
+                <td>{{ log.subject }}</td>
+                <td>{{ log.status }}</td>
+                <td>{{ log.sent_at|default:"Not sent" }}</td>
+                <td>{{ log.created_at }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
